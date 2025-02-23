@@ -16,7 +16,7 @@ class ImageGenerator {
         if (!this.locationInput.value || !this.climateIssue.value) {
             alert('Please fill in all fields');
             return;
-        console.error('CAME IN generateImages function', error);
+        console.log('CAME IN generateImages function');
         }
 
         // Show loading state
