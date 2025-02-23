@@ -12,7 +12,7 @@ class ImageGenerator {
         this.generateBtn.addEventListener('click', () => this.generateImages());
     }
 
-    async generateImages(locationInput, climateIssue) {
+    async generateImages() {
         if (!this.locationInput.value || !this.climateIssue.value) {
             alert('Please fill in all fields');
             return;
