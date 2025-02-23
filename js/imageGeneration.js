@@ -57,9 +57,9 @@ class ImageGenerator {
         //return `https://placeholder.com/600x400?text=${this.locationInput.value}-${this.climateIssue.value}`;
         const WORKER_URL = 'https://scratch-img-gen.spa-mariner.workers.dev';
 
-            async function generateSingleImage(prompt, platform) {
+            async function generateSingleImage(prompt, service) {
               try {
-                const service = platform;
+                //const service = platform;
                   const response = await fetch(WORKER_URL, {
                   method: 'POST',
                   headers: {
