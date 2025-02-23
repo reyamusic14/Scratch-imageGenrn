@@ -12,7 +12,7 @@ class ImageGenerator {
         this.generateBtn.addEventListener('click', () => this.generateImages());
     }
 
-    async generateImages() {
+    async generateImages(location, climateIssue) {
         if (!this.locationInput.value || !this.climateIssue.value) {
             alert('Please fill in all fields');
             return;
@@ -23,10 +23,12 @@ class ImageGenerator {
         this.generateBtn.textContent = 'Generating...';
 
         try {
+
+            const prompt = 'create a image depicting a climate change issue', this.locationInput.value, ' affecting ', this.climateIssue.value, '.Add a catchy slogan also in the image';
             // Simulate API calls to different AI platforms
             const images = await Promise.all([
-                this.generateSingleImage('stability'),
-                this.generateSingleImage('openai'),
+                this.generateSingleImage(prompt, 'stability'),
+                this.generateSingleImage(prompt, 'openai'),
                 //this.generateSingleImage('platform3')
             ]);
 
@@ -50,7 +52,7 @@ class ImageGenerator {
         }
     }
 
-    async generateSingleImage(platform) {
+    async generateSingleImage(prompt, platform) {
         // Simulate API call - replace with actual AI image generation API
         //return `https://placeholder.com/600x400?text=${this.locationInput.value}-${this.climateIssue.value}`;
         const WORKER_URL = 'https://scratch-img-gen.spa-mariner.workers.dev';
