@@ -16,16 +16,16 @@ class ImageGenerator {
         if (!this.locationInput.value || !this.climateIssue.value) {
             alert('Please fill in all fields');
             return;
-        console.log('CAME IN generateImages function');
         }
+        console.log('CAME IN generateImages function');
 
         // Show loading state
         this.generateBtn.disabled = true;
         this.generateBtn.textContent = 'Generating...';
 
         try {
-            console.log("I am trying to generate now", location, locationInput, climateIssue);
-            const prompt = `Create an image depicting a climate change issue in ${location}, affecting ${climateIssue}. Add a catchy slogan also in the image.`;
+            console.log("I am trying to generate now", this.locationInput.value, this.climateIssue.value);
+            const prompt = `Create an image depicting a climate change issue in ${this.locationInput.value}, affecting ${this.climateIssue.value}. Add a catchy slogan also in the image.`;
             // Simulate API calls to different AI platforms
             const images = await Promise.all([
                 this.generateSingleImage(prompt, 'stability'),
@@ -54,32 +54,24 @@ class ImageGenerator {
     }
 
     async generateSingleImage(prompt, service) {
-        // Simulate API call - replace with actual AI image generation API
-        //return `https://placeholder.com/600x400?text=${this.locationInput.value}-${this.climateIssue.value}`;
-        //const WORKER_URL = 'https://scratch-img-gen.spa-mariner.workers.dev';
-
-            //async generateSingleImage(prompt, service) {
-                const WORKER_URL = 'https://scratch-img-gen.spa-mariner.workers.dev';
-              try {
-                //const service = platform;
-                  const response = await fetch(WORKER_URL, {
-                  method: 'POST',
-                  headers: {
+        const WORKER_URL = 'https://scratch-img-gen.spa-mariner.workers.dev';
+        try {
+            const response = await fetch(WORKER_URL, {
+                method: 'POST',
+                headers: {
                     'Content-Type': 'application/json',
-                  },
-                  body: JSON.stringify({
+                },
+                body: JSON.stringify({
                     prompt,
                     service // either 'openai' or 'stability'
-                  }),
-                });
-                
-                return await response.json();
-              } catch (error) {
-                console.error('Error:', error);
-                throw error;
-              }
-            }
-    //}
+                }),
+            });
+            return await response.json();
+        } catch (error) {
+            console.error('Error:', error);
+            throw error;
+        }
+    }
 
     updateClimateInfo() {
         const climateData = {
@@ -98,7 +90,6 @@ class ImageGenerator {
                 effects: 'Loss of marine habitat, ecosystem collapse, tourism impact',
                 solutions: 'Reduce emissions, marine protected areas, coral restoration'
             },
-            // Add more climate issues here
         };
 
         const info = climateData[this.climateIssue.value];
@@ -107,5 +98,4 @@ class ImageGenerator {
     }
 }
 
-new ImageGenerator(); 
-//export { generateImages };
+export default ImageGenerator; // Export the class for later use
