@@ -4,6 +4,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const locationInput = document.getElementById('location');
     const climateIssueSelect = document.getElementById('climate-issue');
 
+    import { generateImages } from './imageGeneration.js';
+    
     generateBtn.addEventListener('click', async () => {
         const location = locationInput.value;
         const climateIssue = climateIssueSelect.value;
