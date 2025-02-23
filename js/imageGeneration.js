@@ -24,33 +24,11 @@ class ImageGenerator {
 
         try {
             // Simulate API calls to different AI platforms
-            /*const images = await Promise.all([
+            const images = await Promise.all([
                 this.generateSingleImage('platform1'),
                 this.generateSingleImage('platform2'),
                 this.generateSingleImage('platform3')
-            ]);*/
-
-            const WORKER_URL = 'https://your-worker-name.your-subdomain.workers.dev';
-
-            async function generateImage(prompt, service) {
-              try {
-                const images = await fetch(WORKER_URL, {
-                  method: 'POST',
-                  headers: {
-                    'Content-Type': 'application/json',
-                  },
-                  body: JSON.stringify({
-                    prompt,
-                    platform // either 'openai' or 'stability'
-                  }),
-                });
-                
-                return await images.json();
-              } catch (error) {
-                console.error('Error:', error);
-                throw error;
-              }
-            }
+            ]);
 
             // Update UI with generated images
             const imageCards = document.querySelectorAll('.image-card img');
@@ -74,7 +52,28 @@ class ImageGenerator {
 
     async generateSingleImage(platform) {
         // Simulate API call - replace with actual AI image generation API
-        return `https://placeholder.com/600x400?text=${this.locationInput.value}-${this.climateIssue.value}`;
+        //return `https://placeholder.com/600x400?text=${this.locationInput.value}-${this.climateIssue.value}`;
+        const WORKER_URL = 'https://your-worker-name.your-subdomain.workers.dev';
+
+            async function generateImage(prompt, service) {
+              try {
+                const response = await fetch(WORKER_URL, {
+                  method: 'POST',
+                  headers: {
+                    'Content-Type': 'application/json',
+                  },
+                  body: JSON.stringify({
+                    prompt,
+                    service // either 'openai' or 'stability'
+                  }),
+                });
+                
+                return await response.json();
+              } catch (error) {
+                console.error('Error:', error);
+                throw error;
+              }
+            }
     }
 
     updateClimateInfo() {
