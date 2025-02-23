@@ -1,14 +1,18 @@
+import ImageGenerator from './imageGeneration.js'; // Import the class
+
 document.addEventListener('DOMContentLoaded', () => {
     const generateBtn = document.getElementById('generate-btn');
     const resultsSection = document.querySelector('.results-section');
     const locationInput = document.getElementById('location');
     const climateIssueSelect = document.getElementById('climate-issue');
 
+    // Instantiate ImageGenerator when DOM is loaded
+    const imageGenerator = new ImageGenerator();
+
     generateBtn.addEventListener('click', async () => {
         const location = locationInput.value;
         const climateIssue = climateIssueSelect.value;
-        //import { generateImages } from './imageGeneration.js';
-        
+
         if (!location || !climateIssue) {
             alert('Please fill in all fields');
             return;
@@ -19,11 +23,9 @@ document.addEventListener('DOMContentLoaded', () => {
         generateBtn.textContent = 'Generating...';
 
         try {
-            // Generate images (to be implemented)
-            // await generateImages(location, climateIssue);
-            const ImageGenerator = new ImageGenerator();
-            await ImageGenerator.generateImages(location, climateIssue);
-            
+            // Call generateImages method directly on the instantiated object
+            await imageGenerator.generateImages();  // This will now use the class properties
+
             // Show results section
             resultsSection.classList.remove('hidden');
             
@@ -62,60 +64,7 @@ function updateClimateInfo(climateIssue, tab = 'causes') {
             effects: 'Loss of biodiversity, soil erosion, increased CO2 emissions',
             solutions: 'Sustainable forestry, reforestation programs, reduced paper consumption'
         },
-        // Add more climate issues as needed
     };
 
     infoContent.innerHTML = `<p>${climateData[climateIssue][tab]}</p>`;
 }
-
-class SocialSharing {
-    constructor() {
-        this.shareBtn = document.getElementById('share-btn');
-        this.init();
-    }
-
-    init() {
-        this.shareBtn.addEventListener('click', () => this.showShareOptions());
-    }
-
-    showShareOptions() {
-        const shareData = {
-            title: 'GreenGlitch - Climate Change Awareness',
-            text: `Check out this climate change visualization for ${document.getElementById('location').value}`,
-            url: window.location.href
-        };
-
-        if (navigator.share) {
-            navigator.share(shareData)
-                .then(() => console.log('Shared successfully'))
-                .catch((error) => console.log('Error sharing:', error));
-        } else {
-            this.showFallbackShareDialog();
-        }
-    }
-
-    showFallbackShareDialog() {
-        const modal = document.createElement('div');
-        modal.className = 'share-modal';
-        modal.innerHTML = `
-            <div class="share-options">
-                <button onclick="window.open('https://twitter.com/intent/tweet?text=${encodeURIComponent(window.location.href)}')">
-                    <i class="fab fa-twitter"></i> Twitter
-                </button>
-                <button onclick="window.open('https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}')">
-                    <i class="fab fa-facebook"></i> Facebook
-                </button>
-                <button onclick="window.open('https://www.linkedin.com/shareArticle?url=${encodeURIComponent(window.location.href)}')">
-                    <i class="fab fa-linkedin"></i> LinkedIn
-                </button>
-            </div>
-        `;
-        document.body.appendChild(modal);
-        
-        modal.addEventListener('click', (e) => {
-            if (e.target === modal) modal.remove();
-        });
-    }
-}
-
-new SocialSharing(); 
