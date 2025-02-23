@@ -79,7 +79,7 @@ class ImageGenerator {
                 throw error;
               }
             }
-    }
+    //}
 
     updateClimateInfo() {
         const climateData = {
@@ -108,4 +108,4 @@ class ImageGenerator {
 }
 
 new ImageGenerator(); 
-export { generateImages };
+//export { generateImages };
