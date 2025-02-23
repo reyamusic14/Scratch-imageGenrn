@@ -16,6 +16,7 @@ class ImageGenerator {
         if (!this.locationInput.value || !this.climateIssue.value) {
             alert('Please fill in all fields');
             return;
+        console.error('CAME IN generateImages function', error);
         }
 
         // Show loading state
@@ -52,12 +53,12 @@ class ImageGenerator {
         }
     }
 
-    //async generateSingleImage(prompt, platform) {
+    async generateSingleImage(prompt, service) {
         // Simulate API call - replace with actual AI image generation API
         //return `https://placeholder.com/600x400?text=${this.locationInput.value}-${this.climateIssue.value}`;
         //const WORKER_URL = 'https://scratch-img-gen.spa-mariner.workers.dev';
 
-            async generateSingleImage(prompt, service) {
+            //async generateSingleImage(prompt, service) {
                 const WORKER_URL = 'https://scratch-img-gen.spa-mariner.workers.dev';
               try {
                 //const service = platform;
