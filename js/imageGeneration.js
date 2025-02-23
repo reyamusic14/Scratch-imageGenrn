@@ -107,3 +107,4 @@ class ImageGenerator {
 }
 
 new ImageGenerator(); 
+export { generateImages };
