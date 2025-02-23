@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
     generateBtn.addEventListener('click', async () => {
         const location = locationInput.value;
         const climateIssue = climateIssueSelect.value;
-        import { generateImages } from './imageGeneration.js';
+        //import { generateImages } from './imageGeneration.js';
         
         if (!location || !climateIssue) {
             alert('Please fill in all fields');
