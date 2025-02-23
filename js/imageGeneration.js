@@ -25,9 +25,9 @@ class ImageGenerator {
         try {
             // Simulate API calls to different AI platforms
             const images = await Promise.all([
-                this.generateSingleImage('platform1'),
-                this.generateSingleImage('platform2'),
-                this.generateSingleImage('platform3')
+                this.generateSingleImage('stability'),
+                this.generateSingleImage('openai'),
+                //this.generateSingleImage('platform3')
             ]);
 
             // Update UI with generated images
@@ -55,7 +55,7 @@ class ImageGenerator {
         //return `https://placeholder.com/600x400?text=${this.locationInput.value}-${this.climateIssue.value}`;
         const WORKER_URL = 'https://scratch-img-gen.spa-mariner.workers.dev';
 
-            async function generateImage(prompt, service) {
+            async function generateImage(prompt, platform) {
               try {
                 const response = await fetch(WORKER_URL, {
                   method: 'POST',
