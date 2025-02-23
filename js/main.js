@@ -77,7 +77,7 @@ class SocialSharing {
 
     showShareOptions() {
         const shareData = {
-            title: 'EcoVision - Climate Change Awareness',
+            title: 'GreenGlitch - Climate Change Awareness',
             text: `Check out this climate change visualization for ${document.getElementById('location').value}`,
             url: window.location.href
         };
