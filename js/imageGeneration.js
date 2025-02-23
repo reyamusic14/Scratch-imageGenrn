@@ -53,7 +53,7 @@ class ImageGenerator {
     async generateSingleImage(platform) {
         // Simulate API call - replace with actual AI image generation API
         //return `https://placeholder.com/600x400?text=${this.locationInput.value}-${this.climateIssue.value}`;
-        const WORKER_URL = 'https://your-worker-name.your-subdomain.workers.dev';
+        const WORKER_URL = 'https://scratch-img-gen.spa-mariner.workers.dev';
 
             async function generateImage(prompt, service) {
               try {
