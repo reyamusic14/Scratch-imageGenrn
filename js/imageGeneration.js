@@ -56,7 +56,7 @@ class ImageGenerator {
     async generateSingleImage() {
         const WORKER_URL = 'https://scratch-img-gen.spa-mariner.workers.dev';
         try {
-            console.log("Calling:", service, "with the prompt:", prompt);
+            console.log("Calling:", this.service, "with the prompt:", this.prompt);
             const response = await fetch(WORKER_URL, {
                 method: 'POST',
                 headers: {
