@@ -21,6 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
         try {
             // Generate images (to be implemented)
             // await generateImages(location, climateIssue);
+            await ImageGenerator.generateImages(location, climateIssue);
             
             // Show results section
             resultsSection.classList.remove('hidden');
