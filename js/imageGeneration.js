@@ -12,7 +12,7 @@ class ImageGenerator {
         this.generateBtn.addEventListener('click', () => this.generateImages());
     }
 
-    async generateImages(location, climateIssue) {
+    async generateImages(locationInput, climateIssue) {
         if (!this.locationInput.value || !this.climateIssue.value) {
             alert('Please fill in all fields');
             return;
@@ -24,7 +24,7 @@ class ImageGenerator {
 
         try {
 
-            const prompt = `Create an image depicting a climate change issue in ${location}, affecting ${climateIssue}. Add a catchy slogan also in the image.`;
+            const prompt = `Create an image depicting a climate change issue in ${locationInput}, affecting ${climateIssue}. Add a catchy slogan also in the image.`;
             // Simulate API calls to different AI platforms
             const images = await Promise.all([
                 this.generateSingleImage(prompt, 'stability'),
