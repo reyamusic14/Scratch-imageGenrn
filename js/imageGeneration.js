@@ -59,7 +59,8 @@ class ImageGenerator {
 
             async function generateImage(prompt, platform) {
               try {
-                const response = await fetch(WORKER_URL, {
+                const service = platform;
+                  const response = await fetch(WORKER_URL, {
                   method: 'POST',
                   headers: {
                     'Content-Type': 'application/json',
