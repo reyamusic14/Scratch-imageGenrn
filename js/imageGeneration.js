@@ -24,7 +24,7 @@ class ImageGenerator {
 
         try {
 
-            const prompt = 'create a image depicting a climate change issue', this.locationInput.value, ' affecting ', this.climateIssue.value, '.Add a catchy slogan also in the image';
+            const prompt = 'create a image depicting a climate change issue', locationInput.value, ' affecting ', climateIssue.value, '.Add a catchy slogan also in the image';
             // Simulate API calls to different AI platforms
             const images = await Promise.all([
                 this.generateSingleImage(prompt, 'stability'),
