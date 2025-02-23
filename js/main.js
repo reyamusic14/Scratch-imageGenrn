@@ -4,12 +4,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const locationInput = document.getElementById('location');
     const climateIssueSelect = document.getElementById('climate-issue');
 
-    import { generateImages } from './imageGeneration.js';
-    
     generateBtn.addEventListener('click', async () => {
         const location = locationInput.value;
         const climateIssue = climateIssueSelect.value;
-
+        import { generateImages } from './imageGeneration.js';
+        
         if (!location || !climateIssue) {
             alert('Please fill in all fields');
             return;
