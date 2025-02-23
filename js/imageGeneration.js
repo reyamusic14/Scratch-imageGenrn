@@ -24,7 +24,7 @@ class ImageGenerator {
 
         try {
 
-            const prompt = 'create a image depicting a climate change issue', location, ' affecting ', climateIssue, '.Add a catchy slogan also in the image';
+            const prompt = 'create a image depicting a climate change issue';//, location, ' affecting ', climateIssue, '.Add a catchy slogan also in the image';
             // Simulate API calls to different AI platforms
             const images = await Promise.all([
                 this.generateSingleImage(prompt, 'stability'),
@@ -52,12 +52,12 @@ class ImageGenerator {
         }
     }
 
-    async generateSingleImage(prompt, platform) {
+    //async generateSingleImage(prompt, platform) {
         // Simulate API call - replace with actual AI image generation API
         //return `https://placeholder.com/600x400?text=${this.locationInput.value}-${this.climateIssue.value}`;
         const WORKER_URL = 'https://scratch-img-gen.spa-mariner.workers.dev';
 
-            async function genImage(prompt, platform) {
+            async function generateSingleImage(prompt, platform) {
               try {
                 const service = platform;
                   const response = await fetch(WORKER_URL, {
