@@ -1,3 +1,5 @@
+const API_URL = 'http://localhost:3000';
+
 class ImageGenerator {
     constructor() {
         this.generateBtn = document.getElementById('generate-btn');
@@ -100,3 +102,43 @@ class ImageGenerator {
 }
 
 export default ImageGenerator; // Export the class for later use
+
+async function generateWithDallE(prompt) {
+    try {
+        const response = await fetch(`${API_URL}/api/dalle`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ prompt })
+        });
+
+        if (!response.ok) {
+            throw new Error('DALL-E API request failed');
+        }
+
+        return await response.json();
+    } catch (error) {
+        throw new Error('DALL-E generation failed: ' + error.message);
+    }
+}
+
+async function generateWithStableDiffusion(prompt) {
+    try {
+        const response = await fetch(`${API_URL}/api/stable-diffusion`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ prompt })
+        });
+
+        if (!response.ok) {
+            throw new Error('Stable Diffusion API request failed');
+        }
+
+        return await response.json();
+    } catch (error) {
+        throw new Error('Stable Diffusion generation failed: ' + error.message);
+    }
+}
