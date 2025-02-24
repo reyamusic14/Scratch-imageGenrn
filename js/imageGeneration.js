@@ -19,32 +19,31 @@ class ImageGenerator {
             alert('Please fill in all fields');
             return;
         }
-        console.log('CAME IN generateImages function');
 
         // Show loading state
         this.generateBtn.disabled = true;
         this.generateBtn.textContent = 'Generating...';
 
         try {
-            console.log("I am trying to generate now", this.locationInput.value, this.climateIssue.value);
             const prompt = `Create an image depicting a climate change issue in ${this.locationInput.value}, affecting ${this.climateIssue.value}. Add a catchy slogan also in the image.`;
-            // Simulate API calls to different AI platforms
-            const images = await Promise.all([
-                this.generateSingleImage(prompt, 'stability'),
-                this.generateSingleImage(prompt, 'openai'),
-                //this.generateSingleImage('platform3')
+            
+            // Generate images using both services
+            const [stabilityResponse, dalleResponse] = await Promise.all([
+                this.generateWithStableDiffusion(prompt),
+                this.generateWithDallE(prompt)
             ]);
 
             // Update UI with generated images
             const imageCards = document.querySelectorAll('.image-card img');
-            imageCards.forEach((img, index) => {
-                img.src = images[index];
-            });
+            if (stabilityResponse.images) {
+                imageCards[0].src = stabilityResponse.images[0];
+            }
+            if (dalleResponse.images) {
+                imageCards[1].src = dalleResponse.images[0];
+            }
 
-            // Show results section
+            // Show results section and update info
             this.resultsSection.classList.remove('hidden');
-            
-            // Update climate information
             this.updateClimateInfo();
         } catch (error) {
             console.error('Error generating images:', error);
@@ -55,24 +54,43 @@ class ImageGenerator {
         }
     }
 
-    async generateSingleImage() {
-        const WORKER_URL = 'https://scratch-img-gen.spa-mariner.workers.dev';
+    async generateWithDallE(prompt) {
         try {
-            console.log("Calling:", this.service, "with the prompt:", this.prompt);
-            const response = await fetch(WORKER_URL, {
+            const response = await fetch(`${API_URL}/api/dalle`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({
-                    prompt,
-                    service // either 'openai' or 'stability'
-                }),
+                body: JSON.stringify({ prompt })
             });
+
+            if (!response.ok) {
+                throw new Error('DALL-E API request failed');
+            }
+
             return await response.json();
         } catch (error) {
-            console.error('Error:', error);
-            throw error;
+            throw new Error('DALL-E generation failed: ' + error.message);
+        }
+    }
+
+    async generateWithStableDiffusion(prompt) {
+        try {
+            const response = await fetch(`${API_URL}/api/stable-diffusion`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ prompt })
+            });
+
+            if (!response.ok) {
+                throw new Error('Stable Diffusion API request failed');
+            }
+
+            return await response.json();
+        } catch (error) {
+            throw new Error('Stable Diffusion generation failed: ' + error.message);
         }
     }
 
@@ -91,54 +109,21 @@ class ImageGenerator {
             'coral-bleaching': {
                 causes: 'Ocean warming, ocean acidification, pollution',
                 effects: 'Loss of marine habitat, ecosystem collapse, tourism impact',
-                solutions: 'Reduce emissions, marine protected areas, coral restoration'
-            },
+                solutions: 'Marine protected areas, reduce emissions, coral restoration'
+            }
         };
 
         const info = climateData[this.climateIssue.value];
         const infoContent = document.querySelector('.info-content');
-        infoContent.innerHTML = `<p>${info.causes}</p>`;
+        infoContent.innerHTML = `
+            <h4>Causes:</h4>
+            <p>${info.causes}</p>
+            <h4>Effects:</h4>
+            <p>${info.effects}</p>
+            <h4>Solutions:</h4>
+            <p>${info.solutions}</p>
+        `;
     }
 }
 
-export default ImageGenerator; // Export the class for later use
-
-async function generateWithDallE(prompt) {
-    try {
-        const response = await fetch(`${API_URL}/api/dalle`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ prompt })
-        });
-
-        if (!response.ok) {
-            throw new Error('DALL-E API request failed');
-        }
-
-        return await response.json();
-    } catch (error) {
-        throw new Error('DALL-E generation failed: ' + error.message);
-    }
-}
-
-async function generateWithStableDiffusion(prompt) {
-    try {
-        const response = await fetch(`${API_URL}/api/stable-diffusion`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ prompt })
-        });
-
-        if (!response.ok) {
-            throw new Error('Stable Diffusion API request failed');
-        }
-
-        return await response.json();
-    } catch (error) {
-        throw new Error('Stable Diffusion generation failed: ' + error.message);
-    }
-}
+export default ImageGenerator;
