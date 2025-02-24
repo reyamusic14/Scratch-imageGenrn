@@ -3,38 +3,110 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Climate Change Image Generator</title>
+    <title>Image Generator</title>
 </head>
 <body>
     <div class="container">
-        <input type="text" id="location" placeholder="Enter location...">
-        <select id="climate-issue">
-            <option value="">Select climate issue...</option>
-            <option value="rising-sea">Rising Sea Levels</option>
-            <option value="drought">Drought</option>
-            <option value="coral-bleaching">Coral Bleaching</option>
+        <textarea id="prompt" placeholder="Enter your prompt here..."></textarea>
+        <select id="model">
+            <option value="dalle">DALL-E</option>
+            <option value="stable">Stable Diffusion</option>
         </select>
-        <button id="generate-btn">Generate Vision</button>
-
-        <div class="results-section hidden">
-            <div class="image-cards">
-                <div class="image-card">
-                    <img src="" alt="Generated image 1">
-                </div>
-                <div class="image-card">
-                    <img src="" alt="Generated image 2">
-                </div>
-            </div>
-            <div class="info-section">
-                <h3>Climate Impact Information</h3>
-                <div class="info-content"></div>
-            </div>
-        </div>
+        <button onclick="generateImage()">Generate</button>
+        <div id="error" style="color: red; display: none;"></div>
+        <div id="result"></div>
     </div>
 
-    <script type="module">
-        import ImageGenerator from './js/imageGeneration.js';
-        new ImageGenerator();
+    <script>
+        async function generateImage() {
+            const prompt = document.getElementById('prompt').value;
+            const model = document.getElementById('model').value;
+            const errorDiv = document.getElementById('error');
+            const resultDiv = document.getElementById('result');
+
+            if (!prompt) {
+                showError('Please enter a prompt');
+                return;
+            }
+
+            try {
+                errorDiv.style.display = 'none';
+                resultDiv.innerHTML = 'Generating...';
+
+                let response;
+                if (model === 'dalle') {
+                    response = await generateWithDallE(prompt);
+                } else {
+                    response = await generateWithStableDiffusion(prompt);
+                }
+
+                if (response.error) {
+                    throw new Error(response.error);
+                }
+
+                displayResult(response);
+            } catch (error) {
+                showError('Failed to generate images. ' + error.message);
+            }
+        }
+
+        async function generateWithDallE(prompt) {
+            try {
+                const response = await fetch('/api/dalle', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ prompt })
+                });
+
+                if (!response.ok) {
+                    throw new Error('DALL-E API request failed');
+                }
+
+                return await response.json();
+            } catch (error) {
+                throw new Error('DALL-E generation failed: ' + error.message);
+            }
+        }
+
+        async function generateWithStableDiffusion(prompt) {
+            try {
+                const response = await fetch('/api/stable-diffusion', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ prompt })
+                });
+
+                if (!response.ok) {
+                    throw new Error('Stable Diffusion API request failed');
+                }
+
+                return await response.json();
+            } catch (error) {
+                throw new Error('Stable Diffusion generation failed: ' + error.message);
+            }
+        }
+
+        function displayResult(response) {
+            const resultDiv = document.getElementById('result');
+            if (response.images && response.images.length > 0) {
+                resultDiv.innerHTML = response.images
+                    .map(imgUrl => `<img src="${imgUrl}" alt="Generated image">`)
+                    .join('');
+            } else {
+                showError('No images were generated');
+            }
+        }
+
+        function showError(message) {
+            const errorDiv = document.getElementById('error');
+            errorDiv.textContent = message;
+            errorDiv.style.display = 'block';
+            document.getElementById('result').innerHTML = '';
+        }
     </script>
 
     <style>
@@ -43,41 +115,17 @@
             margin: 0 auto;
             padding: 20px;
         }
-        input, select {
+        textarea {
             width: 100%;
-            padding: 10px;
+            height: 100px;
             margin-bottom: 10px;
         }
-        #generate-btn {
-            width: 100%;
-            padding: 10px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            cursor: pointer;
+        select {
+            margin-bottom: 10px;
         }
-        #generate-btn:disabled {
-            background-color: #cccccc;
-        }
-        .hidden {
-            display: none;
-        }
-        .image-cards {
-            display: flex;
-            gap: 20px;
-            margin-top: 20px;
-        }
-        .image-card {
-            flex: 1;
-        }
-        .image-card img {
-            width: 100%;
-            height: auto;
-        }
-        .info-section {
-            margin-top: 20px;
-            padding: 20px;
-            background-color: #f5f5f5;
+        #result img {
+            max-width: 100%;
+            margin: 10px 0;
         }
     </style>
 </body>
